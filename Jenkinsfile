@@ -27,13 +27,15 @@ pipeline {
         powershell """
           Import-Module WebAdministration
 
-          \$distRoot = Join-Path \$env:WORKSPACE "${env.UI_DIR}\\dist"
+          # Angular build output is at WORKSPACE\\dist\\<app-name>
+          \$distRoot = Join-Path \$env:WORKSPACE "dist"
           if (!(Test-Path \$distRoot)) { throw "dist not found: \$distRoot" }
 
           \$appDir = Get-ChildItem \$distRoot | Where-Object { \$_.PSIsContainer } | Select-Object -First 1
           if (!\$appDir) { throw "No folder inside dist" }
 
           \$distPath = \$appDir.FullName
+          Write-Host "Using dist path: \$distPath"
 
           if (!(Test-Path "${env.IIS_PATH}")) { New-Item -ItemType Directory -Path "${env.IIS_PATH}" | Out-Null }
 
@@ -43,6 +45,7 @@ pipeline {
           Get-ChildItem -Path "${env.IIS_PATH}" -Force | Remove-Item -Recurse -Force
           Copy-Item "\$distPath\\*" "${env.IIS_PATH}" -Recurse -Force
 
+          # SPA fallback
           \$webConfig = @'
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
@@ -74,6 +77,7 @@ pipeline {
         powershell '''
           $r = Invoke-WebRequest -Uri "${env:SITE_URL}" -UseBasicParsing -TimeoutSec 15
           if ($r.StatusCode -ne 200) { throw "Status: $($r.StatusCode)" }
+          Write-Host "Smoke test OK"
         '''
       }
     }
