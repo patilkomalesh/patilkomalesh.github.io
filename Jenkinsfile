@@ -24,7 +24,6 @@ pipeline {
       steps {
         dir(env.UI_DIR) {
           bat 'npm ci'
-          // Quick proof for CI (optional)
           bat 'npm ls @angular/animations'
         }
       }
@@ -43,7 +42,7 @@ pipeline {
         powershell """
           Import-Module WebAdministration
 
-          # Angular output is in WORKSPACE\\dist\\<app>\\browser for SSR/prerender builds
+          # For SSR/prerender output: deploy dist/<app>/browser
           \$distPath = Join-Path \$env:WORKSPACE "dist\\\\parimey-khushali-wedding\\\\browser"
           if (!(Test-Path \$distPath)) { throw "distPath not found: \$distPath" }
           Write-Host "Using dist path: \$distPath"
@@ -53,7 +52,7 @@ pipeline {
 
           # Backup current deployment
           if (Test-Path "${env.BACKUP_DIR}") { Remove-Item "${env.BACKUP_DIR}" -Recurse -Force }
-          if (Test-Path "${env.IIS_PATH}") { Copy-Item "${env.IIS_PATH}" "${env.BACKUP_DIR}" -Recurse -Force }
+          if (Test-Path "${env.IIS_PATH}") { Copy-Item "${env.IIS_PATH}" "${env.BACKUP_DIR}" -Recurse -Force -ErrorAction SilentlyContinue }
 
           # Clean target
           Get-ChildItem -Path "${env.IIS_PATH}" -Force | Remove-Item -Recurse -Force
@@ -61,7 +60,7 @@ pipeline {
           # Copy new site
           Copy-Item "\$distPath\\\\*" "${env.IIS_PATH}" -Recurse -Force
 
-          # SPA fallback (Angular routing) - requires IIS URL Rewrite module
+          # SPA fallback for Angular routes (requires IIS URL Rewrite module)
           \$webConfig = @'
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
@@ -82,10 +81,10 @@ pipeline {
 </configuration>
 '@
 
-          # Write UTF-8 without BOM (avoids IIS 500.19 on some machines)
+          # Write UTF-8 without BOM (avoids IIS 500.19 parse issues)
           [System.IO.File]::WriteAllText((Join-Path "${env.IIS_PATH}" "web.config"), \$webConfig, (New-Object System.Text.UTF8Encoding(\$false)))
 
-          # Recycle app pool (safe even for static)
+          # Recycle pool
           Restart-WebAppPool -Name "${env.APP_POOL}"
         """
       }
@@ -93,13 +92,21 @@ pipeline {
 
     stage('Smoke Test') {
       steps {
-        powershell """
+        powershell '''
           Start-Sleep -Seconds 2
-          \$r = Invoke-WebRequest -Uri "${env.SITE_URL}" -UseBasicParsing -TimeoutSec 15
-          if (\$r.StatusCode -ne 200) { throw "Status: \$($r.StatusCode)" }
+          $resp = Invoke-WebRequest -Uri "http://localhost:8081/" -UseBasicParsing -TimeoutSec 15
+          if ($resp.StatusCode -ne 200) {
+            throw "Smoke test failed. Status: $($resp.StatusCode)"
+          }
           Write-Host "Smoke test OK"
-        """
+        '''
       }
+    }
+  }
+
+  post {
+    always {
+      echo "Pipeline finished: ${currentBuild.currentResult}"
     }
   }
 }
