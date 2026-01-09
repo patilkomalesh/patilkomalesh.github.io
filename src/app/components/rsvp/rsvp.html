@@ -1,0 +1,144 @@
+<!-- RSVP Section -->
+<section class="rsvp-section">
+  <div class="container">
+    <h1 class="section-title">RSVP</h1>
+    <p class="section-subtitle">Please let us know if you'll be joining our celebration</p>
+    
+    <div class="rsvp-form-container">
+      <form class="rsvp-form" (ngSubmit)="onSubmit()" #rsvpForm="ngForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name *</label>
+            <input 
+              type="text" 
+              id="firstName" 
+              name="firstName"
+              [(ngModel)]="rsvpData.firstName"
+              required
+              #firstName="ngModel"
+              class="form-input">
+            <div *ngIf="firstName.invalid && firstName.touched" class="error">
+              First name is required
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="lastName">Last Name *</label>
+            <input 
+              type="text" 
+              id="lastName" 
+              name="lastName"
+              [(ngModel)]="rsvpData.lastName"
+              required
+              #lastName="ngModel"
+              class="form-input">
+            <div *ngIf="lastName.invalid && lastName.touched" class="error">
+              Last name is required
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email"
+            [(ngModel)]="rsvpData.email"
+            required
+            email
+            #email="ngModel"
+            class="form-input">
+          <div *ngIf="email.invalid && email.touched" class="error">
+            Please enter a valid email address
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input 
+            type="tel" 
+            id="phone" 
+            name="phone"
+            [(ngModel)]="rsvpData.phone"
+            class="form-input">
+        </div>
+        
+        <div class="form-group">
+          <label>Will you be attending? *</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input 
+                type="radio" 
+                name="attending" 
+                value="yes"
+                [(ngModel)]="rsvpData.attending"
+                required>
+              <span>Yes, I'll be there! 🎉</span>
+            </label>
+            <label class="radio-label">
+              <input 
+                type="radio" 
+                name="attending" 
+                value="no"
+                [(ngModel)]="rsvpData.attending"
+                required>
+              <span>Sorry, can't make it 😢</span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="form-group" *ngIf="rsvpData.attending === 'yes'">
+          <label for="guests">Number of Guests (including yourself) *</label>
+          <select 
+            id="guests" 
+            name="guests"
+            [(ngModel)]="rsvpData.guests"
+            class="form-input">
+            <option value="1">1 Guest</option>
+            <option value="2">2 Guests</option>
+            <option value="3">3 Guests</option>
+            <option value="4">4 Guests</option>
+            <option value="5">5+ Guests</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="message">Special Message or Dietary Requirements</label>
+          <textarea 
+            id="message" 
+            name="message"
+            [(ngModel)]="rsvpData.message"
+            rows="4"
+            placeholder="Let us know about any dietary restrictions, accessibility needs, or share a message for the happy couple!"
+            class="form-input"></textarea>
+        </div>
+        
+        <button 
+          type="submit" 
+          class="submit-btn"
+          [disabled]="rsvpForm.invalid">
+          Send RSVP
+        </button>
+      </form>
+      
+      <div class="rsvp-info">
+        <h3>Important Details</h3>
+        <ul>
+          <li><strong>RSVP Deadline:</strong> November 15th, 2025</li>
+          <li><strong>Ceremony:</strong> 4:00 PM - 6:00 PM</li>
+          <li><strong>Reception:</strong> 7:00 PM - 11:00 PM</li>
+          <li><strong>Dress Code:</strong> Formal Traditional or Western</li>
+          <li><strong>Parking:</strong> Complimentary valet service</li>
+        </ul>
+        
+        <div class="contact-info">
+          <h4>Questions?</h4>
+          <p>Contact us at:</p>
+          <p><a href="mailto:wedding@parimeykhushali.com">wedding@parimeykhushali.com</a></p>
+          <p><a href="tel:+15551234567">(555) 123-4567</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

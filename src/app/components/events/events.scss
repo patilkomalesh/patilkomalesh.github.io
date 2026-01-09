@@ -1,0 +1,217 @@
+// Events Section Styles
+.events-section {
+  padding: 4rem 0;
+  min-height: 80vh;
+  
+  .section-title {
+    font-family: var(--serif-font);
+    font-size: 3.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--gold);
+  }
+  
+  .section-subtitle {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 4rem;
+    color: var(--dark-gray);
+  }
+}
+
+// Events Grid
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 3rem;
+  margin-bottom: 5rem;
+}
+
+// Event Card Styles
+.event-card {
+  background: var(--white);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  }
+  
+  &.highlight {
+    border: 3px solid var(--gold);
+    
+    .event-title {
+      color: var(--gold);
+    }
+  }
+  
+  .event-image {
+    height: 250px;
+    overflow: hidden;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    &:hover img {
+      transform: scale(1.05);
+    }
+  }
+  
+  .event-content {
+    padding: 2rem;
+    
+    .event-title {
+      font-family: var(--serif-font);
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: var(--dark-gray);
+    }
+    
+    .event-details {
+      margin-bottom: 1.5rem;
+      
+      .detail-item {
+        display: flex;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+        
+        strong {
+          min-width: 100px;
+          color: var(--gold);
+          font-weight: 600;
+        }
+      }
+    }
+    
+    .event-description {
+      line-height: 1.7;
+      color: var(--dark-gray);
+      font-size: 1rem;
+    }
+  }
+}
+
+// Location Section
+.location-section {
+  margin-top: 5rem;
+  
+  h2 {
+    font-family: var(--serif-font);
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--gold);
+  }
+}
+
+.location-card {
+  background: var(--white);
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  
+  .location-info {
+    h3 {
+      font-family: var(--serif-font);
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: var(--gold);
+    }
+    
+    .address {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      color: var(--dark-gray);
+    }
+    
+    .location-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      
+      .feature {
+        color: var(--dark-gray);
+        font-size: 0.9rem;
+      }
+    }
+  }
+  
+  .map-container {
+    border-radius: 10px;
+    overflow: hidden;
+    
+    iframe {
+      display: block;
+      width: 100%;
+      height: 250px;
+      border: none;
+    }
+    
+    .map-actions {
+      background: var(--soft-gray);
+      padding: 1rem;
+      text-align: center;
+      
+      .directions-btn {
+        display: inline-block;
+        background: var(--gold);
+        color: var(--white);
+        padding: 0.75rem 1.5rem;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          background: var(--dark-gray);
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .events-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .event-card {
+    .event-content {
+      padding: 1.5rem;
+      
+      .event-details .detail-item {
+        flex-direction: column;
+        margin-bottom: 1rem;
+        
+        strong {
+          margin-bottom: 0.25rem;
+        }
+      }
+    }
+  }
+  
+  .location-card {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .events-section .section-title {
+    font-size: 2.5rem;
+  }
+}

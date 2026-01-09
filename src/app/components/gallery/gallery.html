@@ -1,0 +1,20 @@
+<!-- Gallery Section -->
+<section class="gallery-section">
+  <div class="container">
+    <h1 class="section-title">Our Gallery</h1>
+    <p class="section-subtitle">Memories in the making</p>
+    
+    <div class="gallery-grid">
+      <div class="gallery-item" *ngFor="let image of galleryImages">
+        <img [src]="image.src" [alt]="image.alt" class="gallery-image">
+        <div class="gallery-overlay">
+          <p class="image-caption">{{ image.caption }}</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="gallery-note">
+      <p>More photos coming soon! We'll update this gallery with engagement and wedding photos.</p>
+    </div>
+  </div>
+</section>
